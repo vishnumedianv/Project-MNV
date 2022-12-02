@@ -9,7 +9,7 @@
           <img src="img/theme/team-1.jpg" class="avatar" />
         </a>
         <div class="mx-3">
-          <a href="#" class="text-dark font-weight-600 text-sm">John Snow</a>
+          <a href="#" class="text-dark font-weight-600 text-sm">Vishnu Vasita</a>
           <small class="d-block text-muted">3 days ago</small>
         </div>
       </div>

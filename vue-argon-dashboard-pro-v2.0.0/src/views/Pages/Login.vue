@@ -38,7 +38,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
           <div class="card bg-secondary border-0">
-            <div class="card-header bg-transparent pb-5">
+            <div class="card-header bg-transparent pb-4">
               <div class="text-muted text-center mt-2 mb-4">
                 <small>Sign In with</small>
               </div>
@@ -57,15 +57,15 @@
                 </a>
               </div>
             </div>
-            <div class="card-body px-lg-5 py-lg-5">
-              <div class="text-center text-muted mb-4">
+            <div class="card-body px-lg-4 py-lg-4">
+              <div class="text-center text-muted mb-2">
                 <small>Or sign In with credentials</small>
               </div>
               <div class="register-container">
                 <div class="email-input">
                   <i
-                    class="fa-solid fa-envelope"
-                    style="margin-right: 10px"
+                    class="fa-solid fa-envelope fa-xs"
+                    style="margin: 0 5px"
                   ></i>
                   <input
                     class="input-form"
@@ -76,7 +76,7 @@
                   />
                 </div>
                 <div class="password-input">
-                  <i class="fa-solid fa-lock" style="margin-right: 10px"></i>
+                  <i class="fa-solid fa-lock fa-xs" style="margin: 0 5px"></i>
                   <input
                     class="input-form"
                     type="password"
@@ -92,8 +92,8 @@
                 <div class="user-login">
                   <p>
                     New User?
-                    <router-link to="/login">
-                      <span class="login-span">Signup</span>
+                    <router-link to="/register">
+                      <span class="signup-span">Signup</span>
                     </router-link>
                   </p>
                 </div>
@@ -167,7 +167,9 @@ export default {
 </script>
 <style>
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css");
-
+*:focus {
+  outline: none;
+}
 .register-container {
   display: flex;
   justify-content: center;
@@ -176,18 +178,27 @@ export default {
   padding: 0 20px;
   min-width: 50px;
 }
+.email-input,
+.password-input {
+  margin: 5px 0;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 3px;
+  box-shadow: 0 0 2px gray;
+}
 .input-form {
   background: transparent;
-  box-shadow: 0 0 5px lightslategray;
-  border-radius: 5px;
   width: 300px;
   margin: 5px 0;
-  padding: 5px 10px;
+  padding: 0 10px;
   border: none;
   min-width: 100px;
 }
 .input-form::placeholder {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 15px;
 }
 .btn-input button {
   margin-top: 10px;
@@ -200,6 +211,7 @@ export default {
   transition: all 0.3s;
 }
 .btn-input button:hover {
+  cursor: pointer;
   box-shadow: 2px 2px 3px rgb(92, 92, 92);
   background-color: rgb(37, 86, 170);
   font-weight: 400;
@@ -240,11 +252,12 @@ export default {
   margin-top: 5px;
   font-size: 15px;
 }
-.login-span {
+.signup-span {
   text-decoration: underline;
   color: rgb(94, 114, 228);
+  transition: all 0.3s;
 }
-.login-span:hover {
+.signup-span:hover {
   cursor: pointer;
   color: rgb(37, 86, 170);
   font-weight: bold;
