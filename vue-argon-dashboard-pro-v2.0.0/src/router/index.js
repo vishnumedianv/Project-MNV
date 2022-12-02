@@ -8,6 +8,7 @@ import Dashboard from "../views/Dashboard/Dashboard.vue";
 import Alternative from "../views/Dashboard/AlternativeDashboard.vue";
 import Widgets from "../views/Widgets.vue";
 import Charts from "../views/Charts.vue";
+import Employees from "../views/Employees.vue";
 import Calendar from "../views/Calendar/Calendar.vue";
 
 // Pages
@@ -175,6 +176,11 @@ const routes = [
         path: "/charts",
         name: "Charts",
         components: { default: Charts },
+      },
+      {
+        path: "/employees",
+        name: "Employees",
+        components: { default: Employees },
       },
       {
         path: "/calendar",

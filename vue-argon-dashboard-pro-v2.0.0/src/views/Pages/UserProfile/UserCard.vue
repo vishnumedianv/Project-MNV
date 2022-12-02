@@ -1,16 +1,16 @@
 <template>
   <div class="card card-profile">
-    <img
+    <!-- <img
       src="img/theme/img-1-1000x600.jpg"
       alt="Image placeholder"
       class="card-img-top"
-    />
+    /> -->
 
     <div class="row justify-content-center">
       <div class="col-lg-3 order-lg-2">
         <div class="card-profile-image">
           <a href="#">
-            <img src="img/theme/team-4.jpg" class="rounded-circle" />
+            <img src="https://storage.googleapis.com/prod-production-5f508e55bb1bb80026996182/profile-images/6371a439191add00276f6b5a/7XGvDPewzCy7T6siG3bcp.jpeg" class="rounded-circle" />
           </a>
         </div>
       </div>
@@ -44,7 +44,7 @@
       </div>
       <div class="text-center">
         <h5 class="h3">
-          Jessica Jones<span class="font-weight-light">, 27</span>
+          Vishnu Vasita<span class="font-weight-light">, 27</span>
         </h5>
         <div class="h5 font-weight-300">
           <i class="ni location_pin mr-2"></i>Bucharest, Romania
