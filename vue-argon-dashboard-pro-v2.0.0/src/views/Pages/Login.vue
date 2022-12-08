@@ -87,7 +87,7 @@
                 </div>
                 <div class="error" v-html="model.error"></div>
                 <div class="btn-input">
-                  <button @click="register">Login</button>
+                  <button @click="login">Login</button>
                 </div>
                 <div class="user-login">
                   <p>
@@ -109,9 +109,9 @@
 <script>
 // import { Form } from "vee-validate";
 // import * as Yup from "yup";
-import Authentication from "C:/vishnu/vue-argon-dashboard-pro-v2.0.0/src/services/Authentication";
+import Authentication from "../../services/Authentication";
 export default {
-  name: "register",
+  name: "login",
   // components: {
   //   Form,
   // },
@@ -126,9 +126,6 @@ export default {
     };
   },
   methods: {
-    navigatTo(route) {
-      this.$router.push(route);
-    },
     async login() {
       try {
         const response = await Authentication.login({
@@ -137,12 +134,14 @@ export default {
         });
 
         if (response != null) {
-          this.navigatTo({ name: "dashboard" });
+          this.$router.push("/dashboard");
+          localStorage.setItem("token", JSON.stringify(response.data.token));
+          localStorage.setItem("user", JSON.stringify(response.data));
         }
 
         this.model.error = await null;
       } catch (err) {
-        this.model.error = err;
+        this.model.error = "Invalid email/password";
         console.log(this.model.error);
       }
     },
@@ -180,13 +179,13 @@ export default {
 }
 .email-input,
 .password-input {
+  background-color: white;
   margin: 5px 0;
   display: flex;
   justify-items: center;
   align-items: center;
-  border-radius: 5px;
   padding: 3px;
-  box-shadow: 0 0 2px gray;
+  box-shadow: 0 1px 2px rgb(155, 154, 154);
 }
 .input-form {
   background: transparent;

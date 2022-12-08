@@ -83,7 +83,7 @@
                 <!-- Avatar -->
                 <img
                   alt="Image placeholder"
-                  src="img/theme/team-1.jpg"
+                  src="img/theme/team-2.jpg"
                   class="avatar rounded-circle"
                 />
               </div>
@@ -133,7 +133,7 @@
                 <!-- Avatar -->
                 <img
                   alt="Image placeholder"
-                  src="img/theme/team-5.jpg"
+                  src="img/theme/team-2.jpg"
                   class="avatar rounded-circle"
                 />
               </div>

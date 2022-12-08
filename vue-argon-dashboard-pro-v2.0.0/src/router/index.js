@@ -24,6 +24,8 @@ import Buttons from "../views/Components/Buttons.vue";
 import Cards from "../views/Components/Cards.vue";
 import Grid from "../views/Components/GridSystem.vue";
 import Notifications from "../views/Components/Notifications.vue";
+import Checklists from "../views/Components/Checklists.vue";
+import Timeoff from "../views/Components/Timeoff.vue";
 import Icons from "../views/Components/Icons.vue";
 import Typography from "../views/Components/Typography.vue";
 
@@ -66,6 +68,16 @@ let componentsMenu = {
       path: "notifications",
       name: "Notifications",
       components: { default: Notifications },
+    },
+    {
+      path: "checklists",
+      name: "Checklists",
+      components: { default: Checklists },
+    },
+    {
+      path: "timeoff",
+      name: "Timeoff",
+      components: { default: Timeoff },
     },
     {
       path: "icons",
@@ -152,11 +164,11 @@ const routes = [
     path: "/",
     redirect: "/dashboard",
     component: DashboardLayout,
-    name: "Dashboards",
+    name: "dashboard",
     children: [
       {
         path: "/dashboard",
-        name: "Dashboard",
+        name: "dashboard",
         components: { default: Dashboard },
       },
       {
