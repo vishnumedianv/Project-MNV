@@ -26,41 +26,50 @@
     <!-- second div for card view -->
     <div class="tasks">
       <div>
-        <ul class="list-group list-group-flush" data-toggle="checklist">
-          <li class="list-group-item px-0" v-for="item in items" :key="item.id">
-            <div
-              class="checklist-item"
-              :class="{
-                'checklist-item-checked': item.done,
-              }"
-            >
-              <div class="checklist-info">
-                <h5 class="checklist-title mb-0">{{ item.taskName }}</h5>
-                <small>{{ item.DueDate }}</small>
-              </div>
-              <div>
-                <base-checkbox v-model="item.done" />
-              </div>
-            </div>
-          </li>
-        </ul>
+        <el-table
+          :data="tasklist"
+          style="width: 100%"
+          cell-class-name="my-cells"
+        >
+          <el-table-column prop="taskName" label="Task" class="flex-fill" />
+          <el-table-column prop="taskName" label="Type" class="flex-fill" />
+          <el-table-column prop="DueDate" label="Due-Date" class="flex-fill" />
+          <el-table-column prop="DueDate" label="Note" class="flex-fill" />
+          <el-table-column prop="status" label="status" class="flex-fill" />
+          <el-table-column prop="" label="Mark as done" class="flex-fill"
+            ><el-button type="success" solid>done</el-button></el-table-column
+          >
+        </el-table>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ElOption, ElSelect, ElInput } from "element-plus";
+import {
+  ElButton,
+  ElOption,
+  ElSelect,
+  ElInput,
+  ElTable,
+  ElTableColumn,
+} from "element-plus";
 import axios from "axios";
 export default {
   components: {
+    [ElTable.name]: ElTable,
+    [ElTableColumn.name]: ElTableColumn,
     ElSelect,
     ElOption,
     ElInput,
+    ElButton,
   },
   data() {
     return {
-      items: [],
+      tasklist: [],
+      items: {
+        done: true,
+      },
       input1: "",
       selects: {
         simple: "",
@@ -78,11 +87,13 @@ export default {
     getTasks(id) {
       axios
         .get(`http://localhost:7000/tasks/${id}`, {
-          headers: { Authorization: localStorage.getItem("token") },
+          headers: {
+            Authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
         })
         .then((response) => {
           console.log(response.data);
-          this.items = response.data;
+          this.tasklist = response.data;
         });
     },
   },
@@ -121,6 +132,10 @@ img {
 } */
 
 /* user card view css */
+.my-cells {
+  background: white !important;
+}
+
 .img1 {
   width: 100%;
   border-radius: 50%;
