@@ -13,9 +13,9 @@
     <!-- div for search menu -->
     <div class="search-view">
       <div class="search-office-select">
-        <el-select v-model="selects.simple" placeholder="Select">
+        <el-select v-model="officesearch" placeholder="All Offices">
           <el-option
-            v-for="option in selects.languages"
+            v-for="option in offices"
             :key="option.label"
             :label="option.label"
             :value="option.value"
@@ -24,9 +24,9 @@
       </div>
 
       <div class="search-department-select">
-        <el-select v-model="selects.simple" placeholder="Select">
+        <el-select v-model="departsearch" placeholder="All Departments">
           <el-option
-            v-for="option in selects.languages"
+            v-for="option in departments"
             :key="option.label"
             :label="option.label"
             :value="option.value"
@@ -36,9 +36,9 @@
 
       <div class="search-user">
         <el-input
-          v-model="input1"
           placeholder="Please Input"
           style="width: 400px"
+          v-model="search"
         />
       </div>
     </div>
@@ -46,7 +46,7 @@
 
     <!-- user card view youtube clone -->
     <div class="video-div">
-      <div class="video-preview" v-for="user in users" :key="user.id">
+      <div class="video-preview" v-for="user in filteredUsers" :key="user.id">
         <div class="thumbnail-row">
           <img
             class="img1"
@@ -68,8 +68,10 @@
         <div>
           <a href="#">{{ user.email }}</a>
         </div>
+
         <div>
-          <p style="margin: 20px 0 0 0">
+          <hr style="margin: 10px 0" />
+          <p style="margin: 0">
             <small>Line Manager {{ user.manager }}</small>
           </p>
         </div>
@@ -103,31 +105,69 @@ export default {
   },
   data() {
     return {
+      departsearch: "",
+      officesearch: "",
+      search: "",
       users: [],
       currentPage: 1,
       input1: "",
-      selects: {
-        simple: "",
-        languages: [
-          { value: "allstatus", label: "All Status" },
-          { value: "approved", label: "Approved" },
-          { value: "pending", label: "Pending" },
-          { value: "cancelled", label: "Cancelled" },
-          { value: "rejected", label: "Rejected" },
-        ],
-      },
+
+      offices: [
+        { value: "", label: "All Offices" },
+        { value: "Ahmedabad", label: "Ahmedabad" },
+        { value: "MediaNV", label: "MediaNV" },
+      ],
+      departments: [
+        { value: "", label: "All Departments" },
+        { value: "Admin", label: "Admin" },
+        { value: "CSR", label: "CSR" },
+        { value: "Software Development", label: "Software Development" },
+        { value: "Content Writer", label: "Content Writer" },
+        { value: "Designing", label: "Designing" },
+        { value: "HR", label: "HR" },
+        { value: "MediaNV Ahmedabad", label: "MediaNV Ahmedabad" },
+        { value: "MediaNV Headquarter", label: "MediaNV Headquarter" },
+        { value: "Wordpress Developement", label: "Wordpress Developement" },
+        { value: "PPC", label: "PPC" },
+        { value: "SEO", label: "SEO" },
+      ],
     };
   },
   methods: {
+    // finddepartment(value) {
+    //   return this.users.filter((user) =>
+    //     user.position.toLowerCase().includes(value.toLowerCase())
+    //   );
+    // },
     getUsers() {
-      axios.get("http://localhost:7000/employees").then((response) => {
-        console.log(response.data);
-        this.users = response.data;
-      });
+      axios
+        .get("http://localhost:7000/employees", {
+          headers: {
+            Authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.users = response.data;
+        });
     },
   },
   mounted() {
     this.getUsers();
+  },
+  computed: {
+    filteredUsers() {
+      return this.users
+        .filter((user) =>
+          user.userName.toLowerCase().includes(this.search.toLowerCase())
+        )
+        .filter((user) =>
+          user.position.toLowerCase().includes(this.departsearch.toLowerCase())
+        )
+        .filter((user) =>
+          user.office.toLowerCase().includes(this.officesearch.toLowerCase())
+        );
+    },
   },
 };
 </script>

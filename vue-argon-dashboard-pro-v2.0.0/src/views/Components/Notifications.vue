@@ -15,7 +15,7 @@
       </div>
     </base-header>
 
-    <div class="container-fluid mt--6">
+    <div class="mt--6">
       <div class="row justify-content-center">
         <div class="col-lg-10 card-wrapper">
           <card>

@@ -1,8 +1,8 @@
 <template>
   <base-nav
-    container-classes="container-fluid"
+    style="background-color: rgb(54, 134, 255)"
     class="navbar-top border-bottom navbar-expand"
-    :class="{ 'bg-success navbar-dark': type === 'default' }"
+    :class="{ 'navbar-dark': type === 'default' }"
   >
     <!-- Search form -->
     <form
@@ -235,7 +235,7 @@
           <span>Support</span>
         </a>
         <div class="dropdown-divider"></div>
-        <a href="#!" class="dropdown-item">
+        <a href="#login" class="dropdown-item" @click="removeLocal">
           <i class="ni ni-user-run"></i>
           <span>Logout</span>
         </a>
@@ -273,6 +273,10 @@ export default {
     };
   },
   methods: {
+    removeLocal() {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },

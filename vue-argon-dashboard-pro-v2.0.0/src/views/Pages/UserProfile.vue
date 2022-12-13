@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="user-profile">
-      <div class="container-fluid mt--6">
+      <div class="container mt--6">
         <div class="row">
           <div class="col-xl-4 order-xl-2">
             <user-card></user-card>

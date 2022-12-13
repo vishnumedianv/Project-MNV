@@ -3,11 +3,13 @@
     <!-- leave header -->
     <div class="leave-header">
       <div class="leave">
-        <div class="flex-fill"><h3>sick leaves</h3></div>
+        <div class="flex-fill">
+          <h3 style="margin: 0">Sick leaves</h3>
+        </div>
         <div class="flex-fill"><p style="margin: 0">10 Days</p></div>
       </div>
       <div class="leave">
-        <div class="flex-fill"><h3>Unpaid leaves</h3></div>
+        <div class="flex-fill"><h3 style="margin: 0">Unpaid leaves</h3></div>
         <div class="flex-fill"><p style="margin: 0">10 Days</p></div>
       </div>
     </div>
@@ -16,16 +18,20 @@
     <!-- header -->
     <div class="leave-body">
       <div class="leave-body-header">
-        <div class="logo-design"><i class="fa fa-calendar text-white"></i></div>
-        <div><h3>My Requests</h3></div>
+        <div>
+          <span style="font-size: 20px; color: Dodgerblue">
+            <i class="fa fa-list"></i>
+          </span>
+        </div>
+        <div><h3 style="margin: 0">My Requests</h3></div>
       </div>
 
       <!-- second part -->
       <div class="select-filter">
         <div>
-          <el-select v-model="selects.simple" placeholder="Select">
+          <el-select v-model="leavetype" placeholder="Select type">
             <el-option
-              v-for="option in selects.languages"
+              v-for="option in leaveType"
               :key="option.label"
               :label="option.label"
               :value="option.value"
@@ -33,9 +39,9 @@
           </el-select>
         </div>
         <div>
-          <el-select v-model="selects.simple" placeholder="Select">
+          <el-select v-model="leavestatus" placeholder="Select status">
             <el-option
-              v-for="option in selects.languages"
+              v-for="option in leaveStatus"
               :key="option.label"
               :label="option.label"
               :value="option.value"
@@ -44,7 +50,7 @@
         </div>
         <div>
           <el-date-picker
-            v-model="value1"
+            v-model="selectdate"
             type="date"
             placeholder="Pick a day"
           />
@@ -58,7 +64,7 @@
         </div>
 
         <div>
-          <el-button type="success" @click="showModal = true" solid
+          <el-button type="primary" @click="showModal = true" solid
             >New Request</el-button
           >
           <transition name="fade" appear>
@@ -91,17 +97,52 @@
               <div class="timeoffinput-radio">
                 <div><i class="fa-regular fa-clock"></i></div>
                 <div style="padding-top: 3px">
-                  <el-radio-group v-model="radio1">
-                    <el-radio label="1" size="large">Single Day</el-radio>
-                    <el-radio label="2" size="large">Multiple Day</el-radio>
+                  <el-radio-group v-model="days" size="small">
+                    <el-radio label="single day">Single Day</el-radio>
+                    <el-radio label="multiple days">Multiple Day</el-radio>
                   </el-radio-group>
+                  <div>
+                    <div class="singledayinput">
+                      <div>
+                        <el-date-picker
+                          v-if="days == 'single day'"
+                          v-model="date"
+                          type="date"
+                          placeholder="Pick a day"
+                          style="width: 150px"
+                        />
+                      </div>
+                      <div>
+                        <el-time-picker
+                          v-if="days == 'single day'"
+                          v-model="time"
+                          is-range
+                          start-placeholder="Start time"
+                          end-placeholder="End time"
+                          style="width: 300px"
+                        />
+                      </div>
+                    </div>
+                    <el-date-picker
+                      v-if="!(days == 'single day')"
+                      v-model="date"
+                      type="daterange"
+                      start-placeholder="Start Date"
+                      end-placeholder="End Date"
+                      :default-time="defaultTime1"
+                    />
+                  </div>
                 </div>
               </div>
               <div class="timeoffinput-text">
                 <div><i class="fa fa-bars-staggered"></i></div>
                 <div class="flex-fill">
                   <el-form-item label="">
-                    <el-input placeholder="Note(Optional)" type="textarea" />
+                    <el-input
+                      v-model="note"
+                      placeholder="Note(Optional)"
+                      type="textarea"
+                    />
                   </el-form-item>
                 </div>
               </div>
@@ -141,6 +182,7 @@
                 <div class="linemanger">
                   <div class="flex-fill">
                     <el-input
+                      v-model="member"
                       placeholder="Add member to notify them"
                       :prefix-icon="Search"
                     />
@@ -170,49 +212,56 @@
                   </div>
                 </div>
               </div>
-              <el-button type="success" @click="showModal = false" plain
-                >Submit</el-button
-              >
-              <el-button @click="showModal = false">Close</el-button>
+              <div>
+                <el-button
+                  :disabled="!isComplete"
+                  type="primary"
+                  @click="
+                    timeoff();
+                    showModal = false;
+                  "
+                  solid
+                  >Submit</el-button
+                >
+                <el-button type="danger" @click="showModal = false"
+                  >Close</el-button
+                >
+              </div>
             </div>
           </transition>
         </div>
       </div>
 
       <!-- third part -->
-      <div class="leave-table">
-        <el-table
-          class="table-responsive table-flush"
-          header-row-class-name="thead-light"
-          :data="projects"
-        >
-          <el-table-column label="From" min-width="140px" prop="from" sortable>
-            <template v-slot="{ row }">
-              <div class="media align-items-center">
-                <div class="media-body">{{ row.from }}</div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="To" prop="to" min-width="140px">
-          </el-table-column>
-          <el-table-column label="Total" prop="total" min-width="140px">
-          </el-table-column>
-          <el-table-column label="Type" prop="type[0]" min-width="140px">
-          </el-table-column>
-          <el-table-column
-            label="status"
-            min-width="170px"
-            prop="status"
-            sortable
+      <div class="tasks-header">
+        <h3>Completed Tasks</h3>
+      </div>
+      <div class="tasks">
+        <div>
+          <el-table
+            :data="filteredLeaves"
+            style="width: 100%"
+            cell-class-name="my-cells"
           >
-            <template v-slot="{ row }">
-              <badge class="badge-dot mr-4" type="">
-                <i :class="`bg-${row.statusType}`"></i>
-                <span class="status">{{ row.status }}</span>
-              </badge>
-            </template>
-          </el-table-column>
-        </el-table>
+            <el-table-column prop="SelectType" label="type" class="flex-fill" />
+
+            <el-table-column prop="Leaves" label="Leave" class="flex-fill" />
+            <el-table-column prop="SelectDate" label="Date" class="flex-fill" />
+            <el-table-column
+              label="Status"
+              class="flex-fill"
+              prop="status"
+              sortable
+            >
+              <template v-slot="{ row }">
+                <badge class="badge-dot mr-4" type="">
+                  <i :class="`bg-${row.statusType}`"></i>
+                  <span class="status">{{ row.status }}</span>
+                </badge>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
     </div>
   </div>
@@ -220,6 +269,7 @@
 <script>
 import projects from "../Tables/projects";
 import {
+  ElTimePicker,
   ElUpload,
   ElFormItem,
   ElRadio,
@@ -235,8 +285,10 @@ import {
   ElDropdownItem,
   ElDropdown,
 } from "element-plus";
+import axios from "axios";
 export default {
   components: {
+    ElTimePicker,
     ElUpload,
     ElFormItem,
     ElRadio,
@@ -254,24 +306,94 @@ export default {
   },
   data() {
     return {
+      selectdate: "",
+      leavestatus: "",
+      leavetype: "",
+      leaveList: [],
+      member: "",
+      note: "",
+      time: "",
+      date: "",
+      days: "",
       showModal: false,
       projects,
       currentPage: 1,
+      leaveType: [
+        { value: "", label: "All" },
+        { value: "sickleave", label: "Sick Leave (unpaid)" },
+        { value: "unpaid", label: "Unpaid" },
+      ],
+      leaveStatus: [
+        { value: "", label: "All" },
+        { value: "approved", label: "Approved" },
+        { value: "rejected", label: "Rejected" },
+        { value: "pending", label: "Pending" },
+      ],
       selects: {
         simple: "",
         leaves: [
           { value: "sickleave", label: "Sick Leave (unpaid)" },
           { value: "unpaid", label: "Unpaid" },
         ],
-        languages: [
-          { value: "allstatus", label: "All Status" },
-          { value: "approved", label: "Approved" },
-          { value: "pending", label: "Pending" },
-          { value: "cancelled", label: "Cancelled" },
-          { value: "rejected", label: "Rejected" },
-        ],
       },
     };
+  },
+  methods: {
+    async timeoff() {
+      const id = await JSON.parse(localStorage.getItem("user"))._id;
+      console.log(id);
+      axios
+        .post(`http://localhost:7000/leave/${id}`, {
+          SelectType: this.selects.simple,
+          Leaves: this.days,
+          SelectDate: this.date.toString().slice(4, 15),
+          Note: this.note,
+          AddMember: this.member,
+        })
+        .then((resp) => {
+          if (resp) {
+            const id = JSON.parse(localStorage.getItem("user"))._id;
+            this.getLeaveList(id);
+          }
+        });
+    },
+    getLeaveList(id) {
+      this.leaveList = [];
+      axios.get(`http://localhost:7000/getLeaveList/${id}`).then((response) => {
+        this.leaveList = response.data;
+      });
+    },
+  },
+  computed: {
+    isComplete() {
+      return (
+        this.selects.simple &&
+        this.days &&
+        this.date &&
+        this.note &&
+        this.member
+      );
+    },
+    filteredLeaves() {
+      return this.leaveList
+        .filter((leaveList) =>
+          leaveList.SelectType.toLowerCase().includes(
+            this.leavetype.toLowerCase()
+          )
+        )
+        .filter((leaveList) =>
+          leaveList.status
+            .toLowerCase()
+            .includes(this.leavestatus.toLowerCase())
+        )
+        .filter((leaveList) =>
+          leaveList.SelectDate.includes(this.selectdate.toString().slice(4, 15))
+        );
+    },
+  },
+  mounted() {
+    var id = JSON.parse(localStorage.getItem("user"))._id;
+    this.getLeaveList(id);
   },
 };
 </script>
@@ -280,6 +402,12 @@ export default {
 *:focus {
   outline: none;
 }
+.singledayinput {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .img-dp {
   width: 25px;
   height: 25px;
@@ -365,30 +493,27 @@ export default {
 }
 
 .leave-header {
-  margin: 20px 10px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  gap: 20px;
+  gap: 15px;
+  margin: 10px 0;
 }
 
 .leave {
-  background-color: white;
-  width: 250px;
-  padding: 10px;
-  border: none;
-  box-shadow: 0 0 2px grey;
-  border-radius: 0 15px 0 15px;
+  width: 200px;
   display: flex;
   flex-direction: column;
+  padding: 5px 10px;
+  background: white;
+  box-shadow: 0 0 1px grey;
 }
 
 .leave-body-header {
-  padding: 10px;
   display: flex;
-  justify-content: flex-start;
+  gap: 10px;
   align-items: center;
-  gap: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
 }
 .select-filter {
   display: flex;

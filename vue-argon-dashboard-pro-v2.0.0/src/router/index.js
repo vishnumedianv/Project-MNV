@@ -14,6 +14,7 @@ import Calendar from "../views/Calendar/Calendar.vue";
 // Pages
 import Pricing from "../views/Pages/Pricing.vue";
 import Login from "../views/Pages/Login.vue";
+import Admin from "../views/Pages/Admin.vue";
 import Register from "../views/Pages/Register.vue";
 import Lock from "../views/Pages/Lock.vue";
 import Profile from "../views/Pages/UserProfile.vue";
@@ -225,6 +226,11 @@ const routes = [
         path: "/login",
         name: "Login",
         components: { default: Login },
+      },
+      {
+        path: "/admin",
+        name: "Admin",
+        components: { default: Admin },
       },
       {
         path: "/register",

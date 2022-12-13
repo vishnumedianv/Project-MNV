@@ -31,14 +31,58 @@
           style="width: 100%"
           cell-class-name="my-cells"
         >
+          <el-table-column type="expand">
+            <template #default="props">
+              <div m="4">
+                <p m="t-0 b-2">Task: {{ props.row.taskName }}</p>
+                <p m="t-0 b-2">Due Date: {{ props.row.DueDate }}</p>
+                <p m="t-0 b-2">Description: {{ props.row.Description }}</p>
+                <p m="t-0 b-2">Status: {{ props.row.status }}</p>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="taskName" label="Task" class="flex-fill" />
           <el-table-column prop="taskName" label="Type" class="flex-fill" />
           <el-table-column prop="DueDate" label="Due-Date" class="flex-fill" />
           <el-table-column prop="DueDate" label="Note" class="flex-fill" />
           <el-table-column prop="status" label="status" class="flex-fill" />
-          <el-table-column prop="" label="Mark as done" class="flex-fill"
-            ><el-button type="success" solid>done</el-button></el-table-column
+          <el-table-column prop="" label="Mark as done" class="flex-fill">
+            <template v-slot="{ row }">
+              <el-button type="success" @click="updateTask(row)" solid
+                >done</el-button
+              ></template
+            ></el-table-column
           >
+        </el-table>
+      </div>
+      <transition name="slide" appear>
+        <div class="checlistModal" v-if="showModal">
+          <div class="task-info">
+            <div>task: {{ list.taskName }}</div>
+            <div>Description: {{ list.Description }}</div>
+            <div>Due Date: {{ list.DueDate }}</div>
+          </div>
+          <el-button @click="showModal = false" type="primary" solid
+            >OK</el-button
+          >
+        </div></transition
+      >
+    </div>
+    <div class="tasks-header">
+      <h3>Completed Tasks</h3>
+    </div>
+    <div class="tasks">
+      <div>
+        <el-table
+          :data="completedTasks"
+          style="width: 100%"
+          cell-class-name="my-cells"
+        >
+          <el-table-column prop="taskName" label="Task" class="flex-fill" />
+          <el-table-column prop="taskName" label="Type" class="flex-fill" />
+          <el-table-column prop="DueDate" label="Due-Date" class="flex-fill" />
+          <el-table-column prop="DueDate" label="Note" class="flex-fill" />
+          <el-table-column prop="status" label="status" class="flex-fill" />
         </el-table>
       </div>
     </div>
@@ -66,7 +110,10 @@ export default {
   },
   data() {
     return {
+      showModal: false,
+      list: [],
       tasklist: [],
+      completedTasks: [],
       items: {
         done: true,
       },
@@ -84,7 +131,18 @@ export default {
     };
   },
   methods: {
+    updateTask(row) {
+      const id = row._id;
+      axios.post(`http://localhost:7000/updatetask/${id}`).then((resp) => {
+        if (resp) {
+          const userId = JSON.parse(localStorage.getItem("user"))._id;
+          this.getTasks(userId);
+        }
+      });
+    },
     getTasks(id) {
+      this.completedTasks = [];
+      this.tasklist = [];
       axios
         .get(`http://localhost:7000/tasks/${id}`, {
           headers: {
@@ -92,8 +150,15 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data);
-          this.tasklist = response.data;
+          this.list = response.data;
+          for (let i = 0; i < this.list.length; i++) {
+            console.log(this.list[i]);
+            if (this.list[i].done) {
+              this.completedTasks.push(this.list[i]);
+            } else {
+              this.tasklist.push(this.list[i]);
+            }
+          }
         });
     },
   },
@@ -107,6 +172,35 @@ export default {
 <style>
 *:focus {
   outline: none;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0.2s;
+}
+
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.checlistModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 0 5px black;
 }
 /* .userview {
   display: flex;
@@ -132,6 +226,10 @@ img {
 } */
 
 /* user card view css */
+.el-table__empty-block {
+  background: white !important;
+}
+
 .my-cells {
   background: white !important;
 }
@@ -146,6 +244,11 @@ img {
 }
 p {
   margin: 0;
+}
+.task-header {
+  background-color: white;
+  align-items: center;
+  justify-content: center;
 }
 .video-preview {
   box-shadow: 0 0 3px grey;

@@ -3,40 +3,70 @@
     <template v-slot:header>
       <div class="row align-items-center">
         <div class="col-8">
-          <h3 class="mb-0">Edit profile</h3>
+          <h3 class="mb-0">My Profile</h3>
         </div>
-        <div class="col-4 text-right">
-          <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+        <div
+          v-if="hide"
+          class="col-4 text-right"
+          @click="
+            hide = false;
+            edit = false;
+          "
+        >
+          <a
+            class="btn btn-sm"
+            type="primary"
+            style="
+              width: 70px;
+              font-size: 15px;
+              background-color: rgb(54, 134, 255);
+              color: white;
+            "
+            >Edit</a
+          >
         </div>
       </div>
     </template>
 
-    <form @submit.prevent="updateProfile">
+    <div v-if="edit">
+      <div>
+        <div m="4">
+          <p>Task:</p>
+          <p>Task:</p>
+          <p>Task:</p>
+          <p>Task:</p>
+        </div>
+      </div>
+      <div>
+        <div m="4">
+          <p>Task:</p>
+          <p>Task:</p>
+          <p>Task:</p>
+          <p>Task:</p>
+        </div>
+      </div>
+      <div>
+        <div m="4">
+          <p>Task:</p>
+          <p>Task:</p>
+          <p>Task:</p>
+          <p>Task:</p>
+        </div>
+      </div>
+      <div>
+        <div m="4">
+          <p>Task:</p>
+          <p>Task:</p>
+          <p>Task:</p>
+          <p>Task:</p>
+        </div>
+      </div>
+    </div>
+
+    <form @submit.prevent="updateProfile" v-if="!edit">
       <h6 class="heading-small text-muted mb-4">User information</h6>
 
       <div class="pl-lg-4">
-        <div class="row">
-          <div class="col-lg-6">
-            <base-input
-              name="username"
-              type="text"
-              label="Username"
-              placeholder="Username"
-              v-model="user.username"
-            >
-            </base-input>
-          </div>
-          <div class="col-lg-6">
-            <base-input
-              name="email"
-              type="email"
-              label="Email address"
-              placeholder="mike@email.com"
-              v-model="user.email"
-            >
-            </base-input>
-          </div>
-        </div>
         <div class="row">
           <div class="col-lg-6">
             <base-input
@@ -55,6 +85,26 @@
               label="Last Name"
               placeholder="Last Name"
               v-model="user.lastName"
+            >
+            </base-input>
+          </div>
+          <div class="col-lg-6">
+            <base-input
+              name="email"
+              type="email"
+              label="Email address"
+              placeholder="mike@email.com"
+              v-model="user.email"
+            >
+            </base-input>
+          </div>
+          <div class="col-lg-6">
+            <base-input
+              name="mobile"
+              type="text"
+              label="Contact No."
+              placeholder="Mobile no."
+              v-model="user.username"
             >
             </base-input>
           </div>
@@ -113,16 +163,58 @@
 
       <hr class="my-4" />
       <!-- Description -->
-      <h6 class="heading-small text-muted mb-4">About me</h6>
+      <h6 class="heading-small text-muted mb-4">Bank information</h6>
       <div class="pl-lg-4">
-        <div class="form-group">
-          <label class="form-control-label">About Me</label>
-          <textarea
-            rows="4"
-            class="form-control"
-            placeholder="A few words about you ..."
-          >
-A beautiful premium dashboard for Bootstrap 4.</textarea
+        <div class="row">
+          <div class="col-lg-6">
+            <base-input
+              name="bank"
+              type="text"
+              label="Bank Name"
+              placeholder="Bank Name"
+              v-model="user.firstName"
+            >
+            </base-input>
+          </div>
+          <div class="col-lg-6">
+            <base-input
+              name="account_name"
+              type="text"
+              label="Account Name"
+              placeholder="Account name"
+              v-model="user.username"
+            >
+            </base-input>
+          </div>
+          <div class="col-lg-6">
+            <base-input
+              name="account"
+              type="text"
+              label="Account Number"
+              placeholder="Account Number"
+              v-model="user.lastName"
+            >
+            </base-input>
+          </div>
+          <div class="col-lg-6">
+            <base-input
+              name="branch"
+              type="branch"
+              label="Branch"
+              placeholder="Branch"
+              v-model="user.email"
+            >
+            </base-input>
+          </div>
+        </div>
+        <div>
+          <el-button
+            @click="
+              hide = true;
+              edit = true;
+            "
+            type="primary"
+            >submit</el-button
           >
         </div>
       </div>
@@ -130,9 +222,15 @@ A beautiful premium dashboard for Bootstrap 4.</textarea
   </card>
 </template>
 <script>
+import { ElButton } from "element-plus";
 export default {
+  components: {
+    ElButton,
+  },
   data() {
     return {
+      hide: true,
+      edit: true,
       user: {
         company: "Creative Code Inc.",
         username: "michael23",

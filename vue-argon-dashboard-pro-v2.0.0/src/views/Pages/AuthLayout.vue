@@ -52,6 +52,11 @@
             <span class="nav-link-inner--text">Register</span>
           </router-link>
         </li>
+        <li class="nav-item">
+          <router-link to="/admin" class="nav-link">
+            <span class="nav-link-inner--text">Admin</span>
+          </router-link>
+        </li>
       </ul>
       <hr class="d-lg-none" />
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
