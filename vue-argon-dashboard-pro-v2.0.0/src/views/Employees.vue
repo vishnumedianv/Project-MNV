@@ -48,19 +48,16 @@
     <div class="video-div">
       <div class="video-preview" v-for="user in filteredUsers" :key="user.id">
         <div class="thumbnail-row">
-          <img
-            class="img1"
-            src="https://storage.googleapis.com/prod-production-5f508e55bb1bb80026996182/profile-images/6371a439191add00276f6b5a/7XGvDPewzCy7T6siG3bcp.jpeg"
-          />
+          <img class="img1" :src="user.profile_pic" />
         </div>
         <div>
-          <h3>{{ user.userName }}</h3>
+          <h3>{{ user.fullName }}</h3>
         </div>
         <div>
           <p style="margin: 0">{{ user.position }}</p>
         </div>
         <div>
-          <h4 style="margin: 0">ID {{ user._id.slice(3, 8) }}</h4>
+          <h4 style="margin: 0">ID{{ user._id.slice(3, 8) }}</h4>
         </div>
         <div>
           <p style="margin: 0">+91 {{ user.number }}</p>
@@ -140,16 +137,11 @@ export default {
     //   );
     // },
     getUsers() {
-      axios
-        .get("http://localhost:7000/employees", {
-          headers: {
-            Authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.users = response.data;
-        });
+      axios.get("http://localhost:7000/employees").then((response) => {
+        console.log(response.data);
+        this.users = response.data;
+        console.log(this.users);
+      });
     },
   },
   mounted() {
@@ -159,7 +151,7 @@ export default {
     filteredUsers() {
       return this.users
         .filter((user) =>
-          user.userName.toLowerCase().includes(this.search.toLowerCase())
+          user.fullName.toLowerCase().includes(this.search.toLowerCase())
         )
         .filter((user) =>
           user.position.toLowerCase().includes(this.departsearch.toLowerCase())

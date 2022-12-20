@@ -1,5 +1,5 @@
 <template>
-  <div class="card card-profile">
+  <div class="card card-profile" v-if="users.length">
     <img
       src="img/theme/img-1-1000x600.jpg"
       alt="Image placeholder"
@@ -28,20 +28,24 @@
       </div>
       <div class="text-center">
         <h5 class="h3">
-          Vishnu Vasita<span class="font-weight-light">, 27</span>
+          {{ users[0].fullName }}<span class="font-weight-light">, 27</span>
         </h5>
-        <div style="font-weight: bold">ID007</div>
+        <div style="font-weight: bold">ID {{ users[0]._id.slice(4, 8) }}</div>
         <div class="h5 font-weight-300">
-          <h3 style="color: grey">Software trainee</h3>
+          <h3 style="color: grey">{{ users[0].position }}</h3>
         </div>
         <hr />
         <div class="user-contact-info">
           <div><i class="fa-regular fa-envelope"></i></div>
-          <div><p class="user-email">vishnu@medianv</p></div>
+          <div>
+            <p class="user-email">{{ users[0].email }}</p>
+          </div>
         </div>
         <div class="user-contact-info">
           <div><i class="fa-solid fa-phone"></i></div>
-          <div><p class="user-email">+91 7894561230</p></div>
+          <div>
+            <p class="user-email">+91 {{ users[0].number }}</p>
+          </div>
         </div>
         <div class="user-contact-info">
           <div><i class="fa fa-globe"></i></div>
@@ -54,18 +58,45 @@
         </div>
         <div class="user-department-info">
           <div><p style="margin: 0">OFFICE</p></div>
-          <div><h4>Ahmedabad, Gujarat</h4></div>
+          <div>
+            <h4>{{ users[0].office }}</h4>
+          </div>
         </div>
         <div class="user-department-info">
           <div><p style="margin: 0">LINE MANAGER</p></div>
-          <div><h4>@jay dalal</h4></div>
+          <div>
+            <h4>@{{ users[0].manager }}</h4>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-export default {};
+import axios from "axios";
+export default {
+  data() {
+    return {
+      users: [],
+    };
+  },
+  methods: {
+    async getMyProfile() {
+      await axios
+        .get(
+          `http://localhost:7000/myprofile/${
+            JSON.parse(localStorage.getItem("user"))._id
+          }`
+        )
+        .then((response) => {
+          this.users.push(response.data);
+        });
+    },
+  },
+  mounted() {
+    this.getMyProfile();
+  },
+};
 </script>
 <style>
 .user-contact-info {

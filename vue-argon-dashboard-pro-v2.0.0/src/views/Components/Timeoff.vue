@@ -65,7 +65,7 @@
 
         <div>
           <el-button type="primary" @click="showModal = true" solid
-            >New Request</el-button
+            >+ New Request</el-button
           >
           <transition name="fade" appear>
             <div class="modal-overlay" v-if="showModal"></div>
@@ -109,7 +109,6 @@
                           v-model="date"
                           type="date"
                           placeholder="Pick a day"
-                          style="width: 150px"
                         />
                       </div>
                       <div>
@@ -123,6 +122,10 @@
                         />
                       </div>
                     </div>
+                    {{ date[0] }}
+                    {{ date[1] }}
+                    {{ time[0] }}
+                    {{ time[1] }}
                     <el-date-picker
                       v-if="!(days == 'single day')"
                       v-model="date"
@@ -151,10 +154,14 @@
                 <div>
                   <el-upload
                     drag
-                    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                    type="file"
+                    accept="image/*"
                     multiple
+                    @change="show"
+                    ref="myimage"
                     class="customUpload"
                   >
+                    <img :src="image" />
                     <i
                       class="fa fa-cloud-arrow-up"
                       style="color: lightgreen"
@@ -234,19 +241,23 @@
 
       <!-- third part -->
       <div class="tasks-header">
-        <h3>Completed Tasks</h3>
+        <h3>Your Leaves</h3>
       </div>
       <div class="tasks">
         <div>
           <el-table
+            height="400px"
             :data="filteredLeaves"
             style="width: 100%"
             cell-class-name="my-cells"
           >
             <el-table-column prop="SelectType" label="type" class="flex-fill" />
-
             <el-table-column prop="Leaves" label="Leave" class="flex-fill" />
-            <el-table-column prop="SelectDate" label="Date" class="flex-fill" />
+            <el-table-column prop="startDate" label="Date" class="flex-fill"
+              ><template v-slot="{ row }">
+                <span>{{ $dayjs(row.startDate).format("DD-MM-YYYY") }}</span>
+              </template></el-table-column
+            >
             <el-table-column
               label="Status"
               class="flex-fill"
@@ -306,6 +317,7 @@ export default {
   },
   data() {
     return {
+      image: "",
       selectdate: "",
       leavestatus: "",
       leavetype: "",
@@ -339,17 +351,29 @@ export default {
     };
   },
   methods: {
+    show() {
+      var input = this.$refs;
+
+      var url = URL.createObjectURL(input.myimage.files[0]);
+      this.image = url;
+    },
     async timeoff() {
-      const id = await JSON.parse(localStorage.getItem("user"))._id;
-      console.log(id);
       axios
-        .post(`http://localhost:7000/leave/${id}`, {
-          SelectType: this.selects.simple,
-          Leaves: this.days,
-          SelectDate: this.date.toString().slice(4, 15),
-          Note: this.note,
-          AddMember: this.member,
-        })
+        .post(
+          `http://localhost:7000/leave/${
+            JSON.parse(localStorage.getItem("user"))._id
+          }`,
+          {
+            SelectType: this.selects.simple,
+            Leaves: this.days,
+            startDate: this.date[0] || this.date,
+            endDate: this.date[1],
+            startTime: this.time[0],
+            endTime: this.time[1],
+            Note: this.note,
+            AddMember: this.member,
+          }
+        )
         .then((resp) => {
           if (resp) {
             const id = JSON.parse(localStorage.getItem("user"))._id;
@@ -360,6 +384,7 @@ export default {
     getLeaveList(id) {
       this.leaveList = [];
       axios.get(`http://localhost:7000/getLeaveList/${id}`).then((response) => {
+        console.log(response.data);
         this.leaveList = response.data;
       });
     },
@@ -385,9 +410,6 @@ export default {
           leaveList.status
             .toLowerCase()
             .includes(this.leavestatus.toLowerCase())
-        )
-        .filter((leaveList) =>
-          leaveList.SelectDate.includes(this.selectdate.toString().slice(4, 15))
         );
     },
   },

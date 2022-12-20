@@ -206,10 +206,12 @@
           <a href="#" class="nav-link pr-0" @click.prevent>
             <div class="media align-items-center">
               <span class="avatar avatar-sm rounded-circle">
-                <img alt="Image placeholder" src="img/theme/team-4.jpg" />
+                <img alt="Image placeholder" :src="user.profile_pic" />
               </span>
               <div class="media-body ml-2 d-none d-lg-block">
-                <span class="mb-0 text-sm font-weight-bold">Vishnu Vasita</span>
+                <span class="mb-0 text-sm font-weight-bold">{{
+                  user.fullName
+                }}</span>
               </div>
             </div>
           </a>
@@ -218,7 +220,7 @@
         <div class="dropdown-header noti-title">
           <h6 class="text-overflow m-0">Welcome!</h6>
         </div>
-        <a href="#!" class="dropdown-item">
+        <a href="#pages/user" class="dropdown-item">
           <i class="ni ni-single-02"></i>
           <span>My profile</span>
         </a>
@@ -226,7 +228,7 @@
           <i class="ni ni-settings-gear-65"></i>
           <span>Settings</span>
         </a>
-        <a href="#!" class="dropdown-item">
+        <a href="#calendar" class="dropdown-item">
           <i class="ni ni-calendar-grid-58"></i>
           <span>Activity</span>
         </a>
@@ -270,6 +272,7 @@ export default {
       showMenu: false,
       searchModalVisible: false,
       searchQuery: "",
+      user: "",
     };
   },
   methods: {
@@ -292,6 +295,9 @@ export default {
     hideSidebar() {
       this.$sidebar.displaySidebar(false);
     },
+  },
+  mounted() {
+    this.user = JSON.parse(localStorage.getItem("user"));
   },
 };
 </script>

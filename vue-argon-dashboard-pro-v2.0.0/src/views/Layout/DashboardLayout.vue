@@ -6,7 +6,7 @@
         <sidebar-item
           :link="{
             name: 'dashboard',
-            icon: 'ni ni-shop text-primary',
+            icon: 'fa-solid fa-house-user text-blue',
             path: '/dashboard',
           }"
         >
@@ -15,7 +15,7 @@
         <sidebar-item
           :link="{
             name: 'Employees',
-            icon: 'ni ni-single-02 text-orange',
+            icon: 'fa-solid fa-users text-blue',
             path: '/employees',
           }"
         >
@@ -24,7 +24,7 @@
         <sidebar-item
           :link="{
             name: 'Checklists',
-            icon: 'ni ni-check-bold text-blue',
+            icon: 'fa fa-clipboard  text-blue',
             path: '/components/checklists',
           }"
         >
@@ -33,7 +33,7 @@
         <sidebar-item
           :link="{
             name: 'Timeoff',
-            icon: 'ni ni-user-run text-green',
+            icon: 'fa fa-business-time  text-blue',
             path: '/components/timeoff',
           }"
         >
@@ -42,7 +42,7 @@
         <sidebar-item
           :link="{
             name: 'Calendar',
-            icon: 'ni ni-calendar-grid-58 text-pink',
+            icon: 'ni ni-calendar-grid-58  text-blue',
             path: '/calendar',
           }"
         >
@@ -51,7 +51,7 @@
         <sidebar-item
           :link="{
             name: 'Notifications',
-            icon: 'ni ni-bell-55 text-red',
+            icon: 'ni ni-bell-55  text-blue',
             path: '/components/notifications',
           }"
         >
@@ -60,11 +60,21 @@
         <sidebar-item
           :link="{
             name: 'Profile',
-            icon: 'ni ni-circle-08 text-purple',
+            icon: 'ni ni-circle-08  text-blue',
             path: '/pages/user',
           }"
         >
         </sidebar-item>
+        <template v-if="admin">
+          <sidebar-item
+            :link="{
+              name: 'Myadmin',
+              icon: 'ni ni-single-02 text-blue',
+              path: '/components/myadmin',
+            }"
+          >
+          </sidebar-item>
+        </template>
       </template>
     </side-bar>
     <div class="main-content" style="background-color: rgb(241, 243, 249)">
@@ -101,11 +111,20 @@ import DashboardNavbar from "./DashboardNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 
 export default {
+  data() {
+    return {
+      admin: "",
+    };
+  },
   components: {
     DashboardNavbar,
     ContentFooter,
   },
   methods: {
+    getAdmin() {
+      console.log(typeof JSON.parse(localStorage.getItem("user")).admin);
+      this.admin = JSON.parse(localStorage.getItem("user")).admin;
+    },
     initScrollbar() {
       let isWindows = navigator.platform.startsWith("Win");
       if (isWindows) {
@@ -115,6 +134,7 @@ export default {
   },
   mounted() {
     this.initScrollbar();
+    this.getAdmin();
   },
 };
 </script>

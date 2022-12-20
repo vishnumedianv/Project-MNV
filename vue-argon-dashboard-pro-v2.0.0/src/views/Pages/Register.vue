@@ -131,7 +131,7 @@ export default {
       const password = values.password;
       try {
         const response = await Authentication.register({
-          userName: name,
+          fullName: name,
           email: email,
           password: password,
         });

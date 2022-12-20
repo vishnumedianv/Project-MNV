@@ -1,6 +1,7 @@
 <template>
   <div class="container" style="height: 100%">
     <!-- div for search menu -->
+
     <div class="search-view">
       <div class="search-office-select">
         <el-select v-model="selects.simple" placeholder="Select">
@@ -23,14 +24,13 @@
         </div>
       </div>
     </div>
+    <div class="tasks-header">
+      <h3>New Tasks</h3>
+    </div>
     <!-- second div for card view -->
     <div class="tasks">
       <div>
-        <el-table
-          :data="tasklist"
-          style="width: 100%"
-          cell-class-name="my-cells"
-        >
+        <el-table height="200px" :data="tasklist" cell-class-name="my-cells">
           <el-table-column type="expand">
             <template #default="props">
               <div m="4">
@@ -74,6 +74,7 @@
     <div class="tasks">
       <div>
         <el-table
+          height="200px"
           :data="completedTasks"
           style="width: 100%"
           cell-class-name="my-cells"
@@ -202,6 +203,10 @@ export default {
   padding: 25px;
   box-shadow: 0 0 5px black;
 }
+.div.el-table {
+  background: white !important;
+}
+
 /* .userview {
   display: flex;
   flex-grow: 4;

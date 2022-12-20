@@ -29,15 +29,12 @@ import Checklists from "../views/Components/Checklists.vue";
 import Timeoff from "../views/Components/Timeoff.vue";
 import Icons from "../views/Components/Icons.vue";
 import Typography from "../views/Components/Typography.vue";
+import Myadmin from "../views/Components/Myadmin.vue";
 
 // Tables pages
 import RegularTables from "../views/Tables/RegularTables.vue";
 import SortableTables from "../views/Tables/SortableTables.vue";
 import PaginatedTables from "../views/Tables/PaginatedTables.vue";
-
-// Maps pages
-import GoogleMaps from "../views/Maps/GoogleMaps.vue";
-import VectorMaps from "../views/Maps/VectorMaps.vue";
 
 // Forms pages
 import FormElements from "../views/Forms/FormElements.vue";
@@ -81,6 +78,11 @@ let componentsMenu = {
       components: { default: Timeoff },
     },
     {
+      path: "myadmin",
+      name: "Myadmin",
+      components: { default: Myadmin },
+    },
+    {
       path: "icons",
       name: "Icons",
       components: { default: Icons },
@@ -113,25 +115,6 @@ let tablesMenu = {
       path: "paginated",
       name: "Paginated",
       components: { default: PaginatedTables },
-    },
-  ],
-};
-
-let mapsMenu = {
-  path: "/maps",
-  component: DashboardLayout,
-  redirect: "/maps/google",
-  name: "Maps",
-  children: [
-    {
-      path: "google",
-      name: "Google Maps",
-      components: { default: GoogleMaps },
-    },
-    {
-      path: "vector",
-      name: "Vector Map",
-      components: { default: VectorMaps },
     },
   ],
 };
@@ -246,7 +229,7 @@ const routes = [
   },
   componentsMenu,
   tablesMenu,
-  mapsMenu,
+
   formsMenu,
 ];
 
